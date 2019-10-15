@@ -165,7 +165,6 @@ Set_port(){
 	while true
 		do
 		echo -e "请输入 Shadowsocks 端口 [1-65535]"
-		read -e -p "(默认: 443):" ss_port
 		[[ -z "${ss_port}" ]] && ss_port="443"
 		echo $((${ss_port}+0)) &>/dev/null
 		if [[ $? -eq 0 ]]; then
@@ -184,7 +183,6 @@ Set_port(){
 }
 Set_password(){
 	echo "请输入 Shadowsocks 密码 [0-9][a-z][A-Z]"
-	read -e -p "(默认: 随机生成):" ss_password
 	[[ -z "${ss_password}" ]] && ss_password=$(date +%s%N | md5sum | head -c 16)
 	echo && echo "========================"
 	echo -e "	密码 : ${Red_background_prefix} ${ss_password} ${Font_color_suffix}"
@@ -207,8 +205,7 @@ Set_cipher(){
  ${Green_font_prefix}12.${Font_color_suffix} chacha20-ietf-poly1305 (AEAD)
 
  ${Tip} chacha20 系列加密方式无需额外安装 libsodium，Shadowsocks Go版默认集成 !" && echo
-	read -e -p "(默认: 12. chacha20-ietf-poly1305):" ss_cipher
-	[[ -z "${ss_cipher}" ]] && ss_cipher="12"
+	[[ -z "${ss_cipher}" ]] && ss_cipher="5"
 	if [[ ${ss_cipher} == "1" ]]; then
 		ss_cipher="aes-128-cfb"
 	elif [[ ${ss_cipher} == "2" ]]; then
@@ -243,7 +240,6 @@ Set_cipher(){
 Set_verbose(){
 	echo -e "是否启用详细日志模式？[Y/n]
 启用详细日志模式就可以在日志中看到链接者信息(链接时间、链接代理端口、链接者IP、链接者访问的目标域名或IP这些非敏感类信息)。"
-	read -e -p "(默认：N 禁用):" ss_verbose
 	[[ -z "${ss_verbose}" ]] && ss_verbose="N"
 	if [[ "${ss_verbose}" == [Yy] ]]; then
 		ss_verbose="YES"
@@ -264,7 +260,7 @@ Set(){
  ${Green_font_prefix}5.${Font_color_suffix}  修改 全部配置
 ————————————————
  ${Green_font_prefix}6.${Font_color_suffix}  监控 运行状态" && echo
-	read -e -p "(默认: 取消):" ss_modify
+
 	[[ -z "${ss_modify}" ]] && echo "已取消..." && exit 1
 	if [[ "${ss_modify}" == "1" ]]; then
 		Read_config
